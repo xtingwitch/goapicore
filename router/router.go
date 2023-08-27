@@ -1,8 +1,8 @@
 package router
 
 import (
-	"github.com/xtingwitch/GoApiCore/core/coreHttp"
-	"github.com/xtingwitch/GoApiCore/core/events"
+	coreHttp2 "github.com/xtingwitch/GoApiCore/coreHttp"
+	events2 "github.com/xtingwitch/GoApiCore/events"
 	"net/http"
 	"regexp"
 )
@@ -24,51 +24,51 @@ func (r *Router) addRoute(method, pattern string, handler CustomHandler) {
 	r.routes = append(r.routes, route)
 }
 
-func (r *Router) Get(pattern string, handler func(request *coreHttp.Request, response *coreHttp.Response) *coreHttp.Response) {
+func (r *Router) Get(pattern string, handler func(request *coreHttp2.Request, response *coreHttp2.Response) *coreHttp2.Response) {
 	r.addRoute("GET", pattern, handler)
 }
 
-func (r *Router) Post(pattern string, handler func(request *coreHttp.Request, response *coreHttp.Response) *coreHttp.Response) {
+func (r *Router) Post(pattern string, handler func(request *coreHttp2.Request, response *coreHttp2.Response) *coreHttp2.Response) {
 	r.addRoute("POST", pattern, handler)
 }
 
-func (r *Router) Patch(pattern string, handler func(request *coreHttp.Request, response *coreHttp.Response) *coreHttp.Response) {
+func (r *Router) Patch(pattern string, handler func(request *coreHttp2.Request, response *coreHttp2.Response) *coreHttp2.Response) {
 	r.addRoute("PATCH", pattern, handler)
 }
 
-func (r *Router) Put(pattern string, handler func(request *coreHttp.Request, response *coreHttp.Response) *coreHttp.Response) {
+func (r *Router) Put(pattern string, handler func(request *coreHttp2.Request, response *coreHttp2.Response) *coreHttp2.Response) {
 	r.addRoute("PUT", pattern, handler)
 }
 
-func (r *Router) Delete(pattern string, handler func(request *coreHttp.Request, response *coreHttp.Response) *coreHttp.Response) {
+func (r *Router) Delete(pattern string, handler func(request *coreHttp2.Request, response *coreHttp2.Response) *coreHttp2.Response) {
 	r.addRoute("DELETE", pattern, handler)
 }
 
-func (r *Router) Head(pattern string, handler func(request *coreHttp.Request, response *coreHttp.Response) *coreHttp.Response) {
+func (r *Router) Head(pattern string, handler func(request *coreHttp2.Request, response *coreHttp2.Response) *coreHttp2.Response) {
 	r.addRoute("HEAD", pattern, handler)
 }
 
-func (r *Router) Options(pattern string, handler func(request *coreHttp.Request, response *coreHttp.Response) *coreHttp.Response) {
+func (r *Router) Options(pattern string, handler func(request *coreHttp2.Request, response *coreHttp2.Response) *coreHttp2.Response) {
 	r.addRoute("OPTIONS", pattern, handler)
 }
 
-func (r *Router) Connect(pattern string, handler func(request *coreHttp.Request, response *coreHttp.Response) *coreHttp.Response) {
+func (r *Router) Connect(pattern string, handler func(request *coreHttp2.Request, response *coreHttp2.Response) *coreHttp2.Response) {
 	r.addRoute("CONNECT", pattern, handler)
 }
 
-func (r *Router) Trace(pattern string, handler func(request *coreHttp.Request, response *coreHttp.Response) *coreHttp.Response) {
+func (r *Router) Trace(pattern string, handler func(request *coreHttp2.Request, response *coreHttp2.Response) *coreHttp2.Response) {
 	r.addRoute("TRACE", pattern, handler)
 }
 
 func (r *Router) fireEvent(eventType string, data interface{}) {
-	eventBus := events.GetGlobalEventBus()
-	eventBus.Broadcast(events.Event{Name: eventType, Data: data})
+	eventBus := events2.GetGlobalEventBus()
+	eventBus.Broadcast(events2.Event{Name: eventType, Data: data})
 }
 
-func (r *Router) ServeHTTP(response *coreHttp.Response, req *http.Request) {
+func (r *Router) ServeHTTP(response *coreHttp2.Response, req *http.Request) {
 	r.fireEvent("Before Routing", req)
 	r.fireEvent("Before Request Construction", req)
-	customReq := coreHttp.NewRequest(req, nil)
+	customReq := coreHttp2.NewRequest(req, nil)
 	r.fireEvent("After Request Construction", customReq)
 
 	for _, route := range r.routes {

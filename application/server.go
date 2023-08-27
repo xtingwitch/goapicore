@@ -1,4 +1,4 @@
-package coreHttp
+package application
 
 import (
 	"github.com/xtingwitch/GoApiCore/router"

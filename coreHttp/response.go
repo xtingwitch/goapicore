@@ -1,6 +1,7 @@
 package coreHttp
 
 import (
+	"encoding/json"
 	"github.com/xtingwitch/GoApiCore/responseModels"
 	"net/http"
 )
@@ -28,6 +29,32 @@ func (r *Response) SetHeader(key, value string) {
 
 func (r *Response) SetStatusCode(statusCode int) {
 	r.statusCode = statusCode
+}
+
+func (r *Response) GetBody() interface{} {
+	return r.body
+}
+
+func (r *Response) GetHeaders() Headers {
+	return r.headers
+}
+
+func (r *Response) GetRawHeaders() http.Header {
+	return r.GetHeaders().rawHeaders
+}
+
+func (r *Response) GetStatusCode() int {
+	return r.statusCode
+}
+
+func (r *Response) GetBodyBytes() ([]byte, error) {
+	bytes, err := json.Marshal(r.GetBody())
+
+	if err != nil {
+		return nil, err
+	}
+
+	return bytes, nil
 }
 
 func (r *Response) MessageResponse(message string) {
